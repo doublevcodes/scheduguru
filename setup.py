@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="scheduguru",
-    version="0.0.3",
+    version="0.0.5",
     description="Schedule Python functions with ease",
     long_description=README,
     long_description_content_type="text/markdown",
