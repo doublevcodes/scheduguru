@@ -24,7 +24,9 @@ class Thread(threading.Thread):
         return self.ret
 
 class Scheduler:
-
+    """
+    
+    """
     _task_id = uuid4().int
 
     def __init__(self, name: str, wait_time: int = 10) -> None:
@@ -50,7 +52,7 @@ class Scheduler:
         with self._thread_lock:
             return task_id in self._task_list
 
-    def _run_funcs_scheduled(self):
+    def _run_funcs_scheduled(self) -> None:
 
         try:
             self._log.debug(f"Attempting to find task in task queue (will wait {self._wait_time} seconds at most)")
@@ -89,7 +91,7 @@ class Scheduler:
             else:
                 self._log.critical(f"{exc.__class__.__name__} occurred during the main loop of the scheduler")
 
-    def _init_scheduler(self):
+    def _init_scheduler(self) -> None:
 
         # Define the main loop the the scheduler will run
         sched_thread = Thread(target=self._run_funcs_scheduled, name="master-thread")
@@ -99,7 +101,7 @@ class Scheduler:
         # Start the main loop
         sched_thread.start()
 
-    def schedule(self, task: t.Callable, args: tuple[t.Any] = (), kwargs: dict[str, t.Any] = {}):
+    def schedule(self, task: t.Callable, args: tuple[t.Any] = (), kwargs: dict[str, t.Any] = {}) -> None:
         
         # If a specified task_id is not passed in to the function, grab the next unique task_id
         task_id = Scheduler._task_id
@@ -118,3 +120,6 @@ class Scheduler:
         self._log.success(f"Successfully scheduled new task with ID {task_id}: {construct_func_rich(task.__name__, args, kwargs)}) for execution ASAP")
 
         Scheduler._task_id = uuid4().int
+
+    def schedule_with_delay(self, delay: int, task: t.Callable, args: tuple[t.Any] = (), kwargs: dict[str, t.Any] = {}):
+        pass
